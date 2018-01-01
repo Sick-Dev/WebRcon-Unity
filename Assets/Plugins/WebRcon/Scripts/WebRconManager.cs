@@ -32,13 +32,7 @@ namespace SickDev.WebRcon.Unity {
         [SerializeField]
         string _cKey;
         [SerializeField, EnumFlags]
-        LogType _attachedLogType = (LogType)(
-            (1 << (int)LogType.Error) |
-            (1 << (int)LogType.Assert) |
-            (1 << (int)LogType.Warning) |
-            (1 << (int)LogType.Log) |
-            (1 << (int)LogType.Exception)
-        );
+        LogType _attachedLogType = (LogType) (-1);
         [SerializeField]
         VerboseLevel verboseLevel = VerboseLevel.Normal;
 
@@ -224,11 +218,6 @@ namespace SickDev.WebRcon.Unity {
 
             if((attachedLogType & type) == type) {
                 string text = condition + "\n" + stackTrace;
-
-                if(type == LogType.Exception || type == LogType.Error)
-                    text = string.Format("{0}", text);
-                else if(type == LogType.Warning)
-                    text = string.Format("{0}", text);
                 console.defaultTab.Log(text);
             }
         }
