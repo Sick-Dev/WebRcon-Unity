@@ -51,8 +51,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d096ce4dedad24291825180d2b6fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoInstantiate: 1
   autoInitialize: 1
-  _cKey: GTV1L8VSDZ
+  _cKey: 0M6EQVX8PI
   _attachedLogType: -1
   verboseLevel: 2
+  _builtInCommands:
+    analytics: 0
+    performanceReporting: 0
+    androidInput: 0
+    animator: 0
+    appleReplayKit: 0
+    appleTvRemote: 0
+    application: 1
+    audioListener: 1
+    audioSettings: 0
+    audioSource: 0
+    caching: 0
+    camera: 0
+    canvas: 0
+    color: 0
+    color32: 0
+    colorUtility: 0
+    crashReport: 0
+    crashReportHandler: 0
+    cursor: 1
+    debug: 1
+    playerConnection: 0
+    display: 1
+    dynamicGI: 0
+    font: 0
+    gameObject: 1
+    hash128: 0
+    handheld: 1
+    humanTrait: 0
+    input: 1
+    compass: 0
+    gyroscope: 0
+    locationService: 0
+    iOSDevice: 0
+    iOSNotificationServices: 0
+    iOSOnDemandResources: 0
+    layerMask: 0
+    lightmapSettings: 0
+    lightProbeProxyVolume: 0
+    lODGroup: 0
+    masterServer: 0
+    mathf: 0
+    microphone: 0
+    physics: 0
+    physics2D: 0
+    playerPrefs: 1
+    proceduralMaterial: 0
+    profiler: 0
+    qualitySettings: 1
+    quaternion: 0
+    random: 1
+    rect: 0
+    reflectionProbe: 0
+    remoteSettings: 0
+    graphicsSettings: 0
+    renderSettings: 1
+    samsungTV: 0
+    sceneManager: 1
+    sceneUtility: 0
+    screen: 1
+    shader: 0
+    sortingLayer: 0
+    systemInfo: 1
+    texture: 0
+    time: 1
+    touchScreenKeyboard: 0
+    vector2: 0
+    vector3: 0
+    vector4: 0
+    vRInputTracking: 0
+    vRDevice: 0
+    vRSettings: 0

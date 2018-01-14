@@ -26,8 +26,6 @@ namespace SickDev.WebRcon.Unity {
         }
 
         [SerializeField]
-        bool autoInstantiate;
-        [SerializeField]
         bool autoInitialize;
         [SerializeField]
         string _cKey;
@@ -35,6 +33,8 @@ namespace SickDev.WebRcon.Unity {
         LogType _attachedLogType = (LogType) (-1);
         [SerializeField]
         VerboseLevel verboseLevel = VerboseLevel.Normal;
+        [SerializeField]
+        BuiltInCommandsBuilder.BuiltInCommandsPreferences _builtInCommands;
 
         Buffer buffer;
         public event Action onLinked;
@@ -45,6 +45,9 @@ namespace SickDev.WebRcon.Unity {
         public event OnCommandHandler onCommand;
 
         public WebConsole console { get; private set; }
+
+        public CommandsManager commandsManager { get { return console.commandsManager; } }
+        public BuiltInCommandsBuilder.BuiltInCommandsPreferences builtInCommands { get { return _builtInCommands; } }
 
         public string cKey {
             get { return _cKey; }
@@ -58,8 +61,10 @@ namespace SickDev.WebRcon.Unity {
 
         [RuntimeInitializeOnLoadMethod(loadType: RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void InitializeOnLoad() {
-            if(prefab.autoInstantiate)
-                Instantiate();
+            if(!prefab.autoInitialize)
+                return;
+            Instantiate();
+            singleton.Initialize();
         }
 
         static void Instantiate() {
@@ -78,10 +83,7 @@ namespace SickDev.WebRcon.Unity {
 
             CreateWebConsole();
             SetupHandlers();
-            if(autoInitialize)
-                Initialize();
-            else
-                ResetBuffers();
+            ResetBuffers();
         }
 
         void CreateWebConsole() {
@@ -153,7 +155,7 @@ namespace SickDev.WebRcon.Unity {
                 buffer.justLinked = false;
                 if (verboseLevel >= VerboseLevel.Normal)
                     Debug.Log("WebRcon: Linked successfully");
-                new BuiltInCommandsBuilder(console.commandsManager).Build();
+                new BuiltInCommandsBuilder(this).Build();
                 if(onLinked != null)
                     onLinked();
             }
