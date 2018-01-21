@@ -32,7 +32,9 @@ namespace SickDev.WebRcon.Unity {
                 DrawBehaviour();
                 break;
             case 1:
+                GUI.enabled = EditorApplication.isPlaying;
                 DrawBuiltInCommands();
+                GUI.enabled = true;
                 break;
             }
         }
@@ -71,6 +73,24 @@ namespace SickDev.WebRcon.Unity {
             ProcessCommandToggled(commandToggled);
         }
 
-        void ProcessCommandToggled(SerializedProperty command) {}
+        void ProcessCommandToggled(SerializedProperty command) {
+            if(command == null)
+                return;
+            switch(command.name) {
+            case "microphone":
+                AddOrRemoveDefineSymbol("COMMAND_SYSTEM_USE_MICROPHONE", BuildTargetGroup.Android, command.boolValue);
+                break;
+            case "locationService":
+                AddOrRemoveDefineSymbol("COMMAND_SYSTEM_USE_LOCATION", BuildTargetGroup.Android, command.boolValue);
+                break;
+            }
+        }
+
+        void AddOrRemoveDefineSymbol(string define, BuildTargetGroup group, bool add) {
+            if(add)
+                DefineSymbolsManager.AddDefine(define, group);
+            else
+                DefineSymbolsManager.RemoveDefine(define, group);
+        }
     }
 }
