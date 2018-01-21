@@ -9,8 +9,7 @@ namespace SickDev.WebRcon.Unity {
             new GUIContent("Behaviour"),
             new GUIContent("Built in Commands"),
         };
-
-        int selectedTab;
+        SerializedProperty selectedTab;
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
@@ -26,8 +25,8 @@ namespace SickDev.WebRcon.Unity {
         }
 
         void DrawTabs() {
-            selectedTab = GUILayout.Toolbar(selectedTab, tabsContents);
-            switch(selectedTab) {
+            selectedTab.intValue = GUILayout.Toolbar(selectedTab.intValue, tabsContents);
+            switch(selectedTab.intValue) {
             case 0:
                 DrawBehaviour();
                 break;

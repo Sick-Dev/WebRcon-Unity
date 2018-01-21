@@ -35,6 +35,8 @@ namespace SickDev.WebRcon.Unity {
         VerboseLevel verboseLevel = VerboseLevel.Normal;
         [SerializeField]
         BuiltInCommandsBuilder.BuiltInCommandsPreferences _builtInCommands;
+        [SerializeField]
+        int selectedTab;
 
         Buffer buffer;
         public event Action onLinked;
