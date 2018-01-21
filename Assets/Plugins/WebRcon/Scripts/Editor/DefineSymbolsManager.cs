@@ -22,6 +22,7 @@ namespace SickDev.WebRcon.Unity {
 
             public DefineSymbolsAgent(BuildTargetGroup group) {
                 this.group = group;
+                LoadSymbols();
             }
 
             void LoadSymbols() {
