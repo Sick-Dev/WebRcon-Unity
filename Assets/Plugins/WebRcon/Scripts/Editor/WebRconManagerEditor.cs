@@ -11,6 +11,10 @@ namespace SickDev.WebRcon.Unity {
         };
         SerializedProperty selectedTab;
 
+        private void OnEnable() {
+            selectedTab = serializedObject.FindProperty("selectedTab");
+        }
+
         public override void OnInspectorGUI() {
             serializedObject.Update();
             DrawScript();
@@ -31,7 +35,7 @@ namespace SickDev.WebRcon.Unity {
                 DrawBehaviour();
                 break;
             case 1:
-                GUI.enabled = EditorApplication.isPlaying;
+                GUI.enabled = !EditorApplication.isPlaying;
                 DrawBuiltInCommands();
                 GUI.enabled = true;
                 break;

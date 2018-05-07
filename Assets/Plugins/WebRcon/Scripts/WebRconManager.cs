@@ -26,6 +26,8 @@ namespace SickDev.WebRcon.Unity {
         }
 
         [SerializeField]
+        int selectedTab;
+        [SerializeField]
         bool autoInitialize;
         [SerializeField]
         string _cKey;
@@ -35,8 +37,6 @@ namespace SickDev.WebRcon.Unity {
         VerboseLevel verboseLevel = VerboseLevel.Normal;
         [SerializeField]
         BuiltInCommandsBuilder.BuiltInCommandsPreferences _builtInCommands;
-        [SerializeField]
-        int selectedTab;
 
         Buffer buffer;
         public event Action onLinked;
@@ -90,9 +90,9 @@ namespace SickDev.WebRcon.Unity {
 
         void CreateWebConsole() {
             console = new WebConsole(cKey, new Configuration(
+                Application.platform != RuntimePlatform.WebGLPlayer,
                 "Assembly-CSharp-firstpass",
-                "Assembly-CSharp",
-                "CommandSystem-Unity"
+                "Assembly-CSharp"
             ));
         }
 
