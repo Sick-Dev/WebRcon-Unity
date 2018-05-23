@@ -42,7 +42,7 @@ namespace SickDev.WebRcon.Unity {
         public event Action onLinked;
         public event Action onUnlinked;
         public event OnDisconnectedHandler onDisconnected;
-        public event OnInnerExceptionThrownHandler onInnerExceptionThrown;
+        public event OnExceptionThrownHandler onExceptionThrown;
         public event OnErrorHandler onError;
         public event OnCommandHandler onCommand;
 
@@ -100,7 +100,7 @@ namespace SickDev.WebRcon.Unity {
             console.onLinked += OnLinked;
             console.onUnlinked += OnUnlinked;
             console.onDisconnected += OnDisconnected;
-            console.onInnerExceptionThrown += OnInternalExceptionThrown;
+            console.onExceptionThrown += OnExceptionThrown;
             console.onError += OnError;
             console.onCommand += OnCommand;
             Application.logMessageReceivedThreaded += OnLogMessageReceived;
@@ -118,9 +118,9 @@ namespace SickDev.WebRcon.Unity {
             buffer.disconnectedError = error;
         }
 
-        void OnInternalExceptionThrown(Exception exception) {
-            Debug.LogError("Inner Exception: " + exception.ToString());
-            buffer.innerExceptionBuffer.Add(exception);
+        void OnExceptionThrown(Exception exception) {
+            Debug.LogError("Exception: " + exception.ToString());
+            buffer.exceptionBuffer.Add(exception);
         }
 
         void OnError(ErrorCode error) {
@@ -147,7 +147,7 @@ namespace SickDev.WebRcon.Unity {
             ProcessOnLinked();
             ProcessOnUnlinked();
             ProcessOnDisconnected();
-            ProcessOnInnerExceptionThrown();
+            ProcessOnExceptionThrown();
             ProcessOnError();
             ProcessOnCommand();
         }
@@ -184,15 +184,15 @@ namespace SickDev.WebRcon.Unity {
             }
         }
 
-        void ProcessOnInnerExceptionThrown() {
-            for(int i = 0; i < buffer.innerExceptionBuffer.Count; i++) {
-                Exception exception = buffer.innerExceptionBuffer[i];
+        void ProcessOnExceptionThrown() {
+            for(int i = 0; i < buffer.exceptionBuffer.Count; i++) {
+                Exception exception = buffer.exceptionBuffer[i];
                 if (verboseLevel >= VerboseLevel.OnlyError)
                     Debug.LogError("WebRcon: "+exception.Message + "\n" + exception.StackTrace);
-                if(onInnerExceptionThrown != null)
-                    onInnerExceptionThrown(exception);
+                if(onExceptionThrown != null)
+                    onExceptionThrown(exception);
             }
-            buffer.innerExceptionBuffer.Clear();
+            buffer.exceptionBuffer.Clear();
         }
 
         void ProcessOnError() {
@@ -239,7 +239,7 @@ namespace SickDev.WebRcon.Unity {
             public bool justLinked;
             public bool justUnlinked;
             public ErrorCode? disconnectedError;
-            public List<Exception> innerExceptionBuffer = new List<Exception>();
+            public List<Exception> exceptionBuffer = new List<Exception>();
             public List<ErrorCode> errorBuffer = new List<ErrorCode>();
             public List<CommandMessage> commandBuffer = new List<CommandMessage>();
         }
