@@ -19,7 +19,8 @@ To use this plugin, you can either download the **Unity package** or copy the co
 # Usage
 ## Initialization
 The folder _WebRcon/Resources/_ contains the prefab _WebRconManager_.
-![WebRconManager Inspector](screenshots/Screenshots/WebRconManager-Inspector.jpg?raw=true)
+![](/../screenshots/Screenshots/WebRconManager-Inspector.jpg?raw=true)
+
 When the "Auto Initialize" property is checked, it will be automatically instantiated in your scene when hitting play.
 The only thing you have to worry about is setting your ckey in the inspector.
 
@@ -83,7 +84,7 @@ It is recommended to manually close the connection at the end of the execution o
 - "onCommand" : Raised when a command is called from the WebConsole. Use it to manually manage the execution of commands. If no delegate is assigned to this event, the [CommandSystem](https://github.com/Cobo3/CommandSystem) will execute the command automatically.
 
 ## Built-in Commands
-![WebRconManager Inspector](screenshots/Screenshots/WebRconManager-Inspector 2.jpg?raw=true)
+![](/../screenshots/Screenshots/WebRconManager-Inspector-2.jpg?raw=true)
 You can check and uncheck the built-in commands that you want to be bundled with your game through the WebRconManager inspector.
 **Note**: When targeting Android, enabling Microhone and Location will also add those same permissions to the final .apk.
 
