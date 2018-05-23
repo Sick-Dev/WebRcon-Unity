@@ -2,6 +2,13 @@
 This plugin works as an extension of the official [WebRcon-CSharp](https://github.com/Sick-Dev/WebRcon-CSharp) plugin, and uses it as its core.
 Hence, this is just an adaptation to be used together with Unity. For a more in-depth guide, please, refer to this [readme](https://github.com/Sick-Dev/WebRcon-CSharp).
 
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Ussage](#usage)
+4. [FAQ](#faq)
+5. [License](#license)
+6. [About](#about)
+
 # Requirements
 In order to use this plugin, you first need:
 - Unity 5.6 or higher
