@@ -52,7 +52,7 @@ newTab.Log("This message is sent to the new tab");
 
 ## Registering Commands
 ```C#
-public static int Max(int a, int b) {
+public static int IsNumberEven(int a, int b) {
   if(a > b)
     return a;
   else
