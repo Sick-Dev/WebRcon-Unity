@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d096ce4dedad24291825180d2b6fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedTab: 0
   autoInitialize: 1
   _cKey: 0M6EQVX8PI
   _attachedLogType: -1
