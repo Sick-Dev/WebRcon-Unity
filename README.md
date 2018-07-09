@@ -52,15 +52,12 @@ newTab.Log("This message is sent to the new tab");
 
 ## Registering Commands
 ```C#
-public static int IsNumberEven(int a, int b) {
-  if(a > b)
-    return a;
-  else
-    return b;
+public static bool IsNumberEven(int number) {
+    return (number % 2) == 0
 }
 ...
 Command command = new FuncCommand<int, bool>(IsNumberEven);
-WebRconManager.singleton.commandsManager.Add(command);
+console.commandsManager.Add(command);
 ```
 Once a command is registered, it can be called from the WebConsole.
 
