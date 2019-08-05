@@ -425,11 +425,6 @@ namespace SickDev.CommandSystem.Unity {
 
         protected void MasterServer() {
 #if !UNITY_WEBGL
-            Type type = typeof(MasterServer);
-            CommandsBuilder builder = new CommandsBuilder(type);
-            builder.useClassName = true;
-            builder.methodsSettings.AddExceptions("PollHostList");
-            manager.Add(builder.Build());
 #endif
         }
 

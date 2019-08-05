@@ -46,14 +46,18 @@ namespace SickDev.WebRcon.Unity {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("autoInitialize"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_cKey"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_attachedLogType"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("verboseLevel"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_verboseLevel"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_showStackTrace"));
         }
 
         void DrawBuiltInCommands() {
             SerializedProperty currentCommand = serializedObject.FindProperty("_builtInCommands");
             SerializedProperty[] commands = new SerializedProperty[currentCommand.Copy().CountRemaining()];
-            for(int i = 0; currentCommand.Next(true); i++)
+            for (int i = 0; i < commands.Length; i++) {
+                if (!currentCommand.Next(true))
+                    break;
                 commands[i] = currentCommand.Copy();
+            }
             commands = commands.OrderBy(x => x.name).ToArray();
 
             int firstColumnCount = commands.Length/2;

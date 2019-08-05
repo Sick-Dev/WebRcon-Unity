@@ -6,17 +6,89 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: selectedTab
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.application
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.audioListener
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.playerPrefs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.qualitySettings
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.random
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.cursor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.debug
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.display
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.gameObject
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.handheld
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.input
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.systemInfo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.screen
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.sceneManager
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _builtInCommands.renderSettings
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: _cKey
+      value: Your ckey
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1359042247751748}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 0
 --- !u!1 &1359042247751748
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4667941122749014}
   - component: {fileID: 114094706439682038}
@@ -30,7 +102,7 @@ GameObject:
 --- !u!4 &4667941122749014
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359042247751748}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -43,7 +115,7 @@ Transform:
 --- !u!114 &114094706439682038
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359042247751748}
   m_Enabled: 1
@@ -52,10 +124,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedTab: 0
-  autoInitialize: 1
-  _cKey: 0M6EQVX8PI
+  autoInitialize: 0
+  _cKey: Your ckey
   _attachedLogType: -1
-  verboseLevel: 2
+  _verboseLevel: 2
+  _showStackTrace: 0
   _builtInCommands:
     analytics: 0
     performanceReporting: 0
@@ -63,8 +136,8 @@ MonoBehaviour:
     animator: 0
     appleReplayKit: 0
     appleTvRemote: 0
-    application: 1
-    audioListener: 1
+    application: 0
+    audioListener: 0
     audioSettings: 0
     audioSource: 0
     caching: 0
@@ -75,17 +148,17 @@ MonoBehaviour:
     colorUtility: 0
     crashReport: 0
     crashReportHandler: 0
-    cursor: 1
-    debug: 1
+    cursor: 0
+    debug: 0
     playerConnection: 0
-    display: 1
+    display: 0
     dynamicGI: 0
     font: 0
-    gameObject: 1
+    gameObject: 0
     hash128: 0
-    handheld: 1
+    handheld: 0
     humanTrait: 0
-    input: 1
+    input: 0
     compass: 0
     gyroscope: 0
     locationService: 0
@@ -101,26 +174,26 @@ MonoBehaviour:
     microphone: 0
     physics: 0
     physics2D: 0
-    playerPrefs: 1
+    playerPrefs: 0
     proceduralMaterial: 0
     profiler: 0
-    qualitySettings: 1
+    qualitySettings: 0
     quaternion: 0
-    random: 1
+    random: 0
     rect: 0
     reflectionProbe: 0
     remoteSettings: 0
     graphicsSettings: 0
-    renderSettings: 1
+    renderSettings: 0
     samsungTV: 0
-    sceneManager: 1
+    sceneManager: 0
     sceneUtility: 0
-    screen: 1
+    screen: 0
     shader: 0
     sortingLayer: 0
-    systemInfo: 1
+    systemInfo: 0
     texture: 0
-    time: 1
+    time: 0
     touchScreenKeyboard: 0
     vector2: 0
     vector3: 0
@@ -128,3 +201,6 @@ MonoBehaviour:
     vRInputTracking: 0
     vRDevice: 0
     vRSettings: 0
+  buffer:
+    justConnected: 0
+    errorBuffer: 

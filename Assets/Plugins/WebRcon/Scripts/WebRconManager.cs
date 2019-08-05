@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
 using SickDev.CommandSystem;
 
 namespace SickDev.WebRcon.Unity {
     public sealed class WebRconManager : MonoBehaviour {
-        enum VerboseLevel { None = 0, OnlyError, Normal, Extended}
+        public class WebConsoleUnity : WebConsole {
+            public override string pluginApi { get { return "Unity"; } }
+
+            public WebConsoleUnity(string cKey, Configuration commandSystemConfiguration) : base(cKey, commandSystemConfiguration) { }
+        }
+
+        public enum VerboseLevel { None = 0, OnlyError, Normal, Extended}
 
         static WebRconManager _prefab;
         static WebRconManager prefab {
@@ -34,17 +41,18 @@ namespace SickDev.WebRcon.Unity {
         [SerializeField, EnumFlags]
         LogType _attachedLogType = (LogType) (-1);
         [SerializeField]
-        VerboseLevel verboseLevel = VerboseLevel.Normal;
+        VerboseLevel _verboseLevel = VerboseLevel.Normal;
+        [SerializeField]
+        bool _showStackTrace;
         [SerializeField]
         BuiltInCommandsBuilder.BuiltInCommandsPreferences _builtInCommands;
-
+        [SerializeField][HideInInspector]
         Buffer buffer;
-        public event Action onLinked;
-        public event Action onUnlinked;
+
+        public event Action onConnected;
         public event OnDisconnectedHandler onDisconnected;
         public event OnExceptionThrownHandler onExceptionThrown;
         public event OnErrorHandler onError;
-        public event OnCommandHandler onCommand;
 
         public WebConsole console { get; private set; }
 
@@ -59,6 +67,16 @@ namespace SickDev.WebRcon.Unity {
         public LogType attachedLogType {
             get { return _attachedLogType; }
             set { _attachedLogType = value; }
+        }
+
+        public VerboseLevel verboseLevel {
+            get { return _verboseLevel; }
+            set { _verboseLevel = value; }
+        }
+
+        public bool showStackTrace {
+            get { return _showStackTrace; }
+            set { _showStackTrace = value; }
         }
 
         [RuntimeInitializeOnLoadMethod(loadType: RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -89,7 +107,7 @@ namespace SickDev.WebRcon.Unity {
         }
 
         void CreateWebConsole() {
-            console = new WebConsole(cKey, new Configuration(
+            console = new WebConsoleUnity(cKey, new Configuration(
                 Application.platform != RuntimePlatform.WebGLPlayer,
                 "Assembly-CSharp-firstpass",
                 "Assembly-CSharp"
@@ -97,8 +115,7 @@ namespace SickDev.WebRcon.Unity {
         }
 
         void SetupHandlers() {
-            console.onLinked += OnLinked;
-            console.onUnlinked += OnUnlinked;
+            console.onConnected += OnConnected;
             console.onDisconnected += OnDisconnected;
             console.onExceptionThrown += OnExceptionThrown;
             console.onError += OnError;
@@ -106,12 +123,8 @@ namespace SickDev.WebRcon.Unity {
             Application.logMessageReceivedThreaded += OnLogMessageReceived;
         }
 
-        void OnLinked() {
-            buffer.justLinked = true;
-        }
-
-        void OnUnlinked() {
-            buffer.justUnlinked = true;
+        void OnConnected() {
+            buffer.justConnected = true;
         }
 
         void OnDisconnected(ErrorCode error) {
@@ -132,11 +145,17 @@ namespace SickDev.WebRcon.Unity {
         }
 
         public void Initialize() {
+            Initialize(cKey);
+        }
+
+        public void Initialize(string cKey) {
+            if (console.isInitialized)
+                throw new AlreadyInitializedException();
             if(string.IsNullOrEmpty(cKey))
                 throw new ArgumentException("cKey is null or empty. Please, ensure to use a valid cKey");
             ResetBuffers();
             console.cKey = cKey;
-            console.Initialize();
+            console.Initialize("test.webrcon.com");
         }
 
         void ResetBuffers() {
@@ -144,32 +163,21 @@ namespace SickDev.WebRcon.Unity {
         }
 
         void Update() {
-            ProcessOnLinked();
-            ProcessOnUnlinked();
+            ProcessOnConnected();
             ProcessOnDisconnected();
             ProcessOnExceptionThrown();
             ProcessOnError();
             ProcessOnCommand();
         }
 
-        void ProcessOnLinked() {
-            if(buffer.justLinked) {
-                buffer.justLinked = false;
+        void ProcessOnConnected() {
+            if(buffer.justConnected) {
+                buffer.justConnected = false;
                 if (verboseLevel >= VerboseLevel.Normal)
-                    Debug.Log("WebRcon: Linked successfully");
+                    Debug.Log("WebRcon: Connected successfully");
                 new BuiltInCommandsBuilder(this).Build();
-                if(onLinked != null)
-                    onLinked();
-            }
-        }
-
-        void ProcessOnUnlinked() {
-            if(buffer.justUnlinked) {
-                buffer.justUnlinked = false;
-                if (verboseLevel >= VerboseLevel.Normal)
-                    Debug.LogWarning("WebRcon: Unlinked");
-                if(onUnlinked != null)
-                    onUnlinked();
+                if(onConnected != null)
+                    onConnected();
             }
         }
 
@@ -207,21 +215,62 @@ namespace SickDev.WebRcon.Unity {
 
         void ProcessOnCommand() {
             for(int i = 0; i < buffer.commandBuffer.Count; i++) {
-                if (verboseLevel >= VerboseLevel.Extended)
-                    Debug.Log("WebRcon: Command processed: \""+buffer.commandBuffer[i].parsedCommand.raw+"\"");
-                if(onCommand != null)
-                        onCommand(buffer.commandBuffer[i]);
-                console.ExecuteCommand(buffer.commandBuffer[i]);
+                CommandMessage command = buffer.commandBuffer[i];
+                Tab tab = console.GetTab(command.tabId);
+                CommandExecuter executer = commandsManager.GetCommandExecuter(command.parsedCommand);
+
+                if (!executer.isValidCommand) {
+                    if (verboseLevel >= VerboseLevel.Normal)
+                        tab.Log("The Command \"" + command.parsedCommand.command + "\" does not exist");
+                }
+                else if (!executer.canBeExecuted) {
+                    if (verboseLevel >= VerboseLevel.Normal)
+                        tab.Log("The Command \"" + command.parsedCommand.raw + "\" does not match any of its overloads");
+                }
+                else {
+                    if (verboseLevel >= VerboseLevel.Extended)
+                        tab.Log("Command processed");
+                    try {
+                        object result = executer.Execute();
+                        if (executer.hasReturnValue) {
+                            string resultString = ConvertCommandResultToString(result);
+                            console.GetTab(command.tabId).Log("Return value: " +resultString);
+                        }
+                    }
+                    catch (CommandSystemException exception) {
+                        if (verboseLevel >= VerboseLevel.OnlyError)
+                            tab.Log(exception.ToString());
+                    }
+                }
             }
             buffer.commandBuffer.Clear();
         }
 
+        string ConvertCommandResultToString(object result) {
+            if (result == null)
+                return "null";
+            else if (result is Array) {
+                Array resultArray = (Array)result;
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < resultArray.Length; i++) {
+                    builder.Append(resultArray.GetValue(i).ToString());
+                    if (i < resultArray.Length - 1)
+                        builder.Append(", ");
+                }
+                return builder.ToString();
+            }
+            else
+                return result.ToString();
+        }
+
         void OnLogMessageReceived(string condition, string stackTrace, LogType type) {
-            if(!console.isLinked)
+            if(!console.isConnected)
                 return;
 
             if((attachedLogType & type) == type) {
-                string text = condition + "\n" + stackTrace;
+                string text = condition;
+                if (showStackTrace)
+                    text += "\n" + stackTrace.Remove(stackTrace.Length-1);//Remove last break line
                 console.defaultTab.Log(text);
             }
         }
@@ -235,9 +284,9 @@ namespace SickDev.WebRcon.Unity {
             Close();
         }
 
+        [Serializable] 
         class Buffer {
-            public bool justLinked;
-            public bool justUnlinked;
+            public bool justConnected;
             public ErrorCode? disconnectedError;
             public List<Exception> exceptionBuffer = new List<Exception>();
             public List<ErrorCode> errorBuffer = new List<ErrorCode>();
